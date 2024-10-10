@@ -1,0 +1,45 @@
+body {
+    background-color: black;
+    align-items: center;
+    align-content: center;
+    text-align: center;
+    color: white;
+    font-family: 'SF Pixelate', sans-serif;
+}
+
+.discord {
+    font-family: 'SF Pixelate', sans-serif;
+    color: white;
+    font-size: 3rem;
+    text-align: center;
+    background-color: #2c2f33;
+    border-color: #99aab5;
+    border-width: 5px;
+    width: 500px;
+}
+
+.discord:hover{
+    background-color: #7289da;
+    border-color: #ffffff;
+}
+
+a {
+    color: white
+    font-family: 'SF Pixelate', sans-serif;
+}
+
+ a:link {
+    color: white;
+  }
+  
+  a:visited {
+    color: white;
+  }
+  
+  a:hover {
+    color: white;
+  }
+  
+  a:active {
+    color: white;
+  } 
