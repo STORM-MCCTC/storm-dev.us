@@ -1,0 +1,48 @@
+<!--------------------------------------------------------------------------------------------------------------------------------------->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+<!--------------------------------------------------------------------------------------------------------------------------------------->
+
+    <script>
+let money = 0;
+let auto_clickers = 0;
+
+function onloadalert() {
+    window.alert("main.js loaded");
+}
+
+function click_button() {
+    money += 1;
+    document.getElementById("money_count").innerHTML = `Money: ${money}`;
+}
+
+function buy_auto() {
+    if (money >= 50) {
+        money -= 50;
+        auto_clickers += 1;
+        document.getElementById("money_count").innerHTML = `money: ${money}`;
+        document.getElementById("auto_clicker_count").innerHTML = `${auto_clickers} owned`;
+        }
+    }
+    </script>
+
+<!--------------------------------------------------------------------------------------------------------------------------------------->
+
+</head>
+<body onload="onloadalert()">
+    <p id="money_count" >Money: 0</p>
+    <button onclick="click_button()" >Click</button>
+    <br>
+    <br>
+    <button onclick="buy_auto()" >Auto Clicker - $50</button>
+    <p id="auto_clicker_count" >0 owned</p>
+</body>
+</html>
+
+<!--------------------------------------------------------------------------------------------------------------------------------------->
