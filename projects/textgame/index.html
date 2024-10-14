@@ -17,6 +17,7 @@
     let steel = 0;
     let coal_mine = 0;
     let iron_mine = 0;
+    let copper_mine = 0;
     let small_factory = 0;
     let steel_mill = 0;
     let large_factory = 0;  
@@ -52,6 +53,15 @@
             iron_mine += 1;
             document.getElementById("money_count").innerHTML = `Money: ${money}`;
             document.getElementById("iron_factory_count").innerHTML = `${iron_mine} Owned | ${iron} Iron`;
+        }
+    }
+
+    function buy_copper_factory() { 
+        if (money >= 50) {
+            money -= 50;
+            copper_mine += 1;
+            document.getElementById("money_count").innerHTML = `Money: ${money}`;
+            document.getElementById("copper_factory_count").innerHTML = `${copper_mine} Owned | ${copper} Copper`;
         }
     }
     
@@ -92,12 +102,16 @@
             money += large_factory * 10; 
             coal += coal_mine; // Each coal mine produces 1 coal per second
             iron += iron_mine; // Each iron mine produces 1 iron per second
-            steel += steel_mill; // Each steel mill produces 1 steel per second
-            iron -= steel_mill; // Each steel mill uses 1 iron per second
-            coal -= steel_mill; // Each steel mill uses 1 coal per second
+            copper += copper_mine; // Each copper mine produces 1 copper per second
+            if (iron > 0 && coal > 0) {
+                steel += steel_mill;  // Each steel mill produces 1 steel per second
+                iron -= steel_mill;    // Each steel mill uses 1 iron per second
+                coal -= steel_mill;    // Each steel mill uses 1 coal per second
+            }
             document.getElementById("money_count").innerHTML = `Money: ${money}`;
             document.getElementById("coal_factory_count").innerHTML = `${coal_mine} Owned | ${coal} Coal`;
             document.getElementById("iron_factory_count").innerHTML = `${iron_mine} Owned | ${iron} Iron`;
+            document.getElementById("copper_factory_count").innerHTML = `${copper_mine} Owned | ${copper} Copper`;
             document.getElementById("Large_steel_count").innerHTML = `${steel_mill} Owned | ${steel} Steel`;
         }, 1000);
     }
@@ -112,6 +126,7 @@
     <!-- <button onclick="dev_button()">Development Button</button>
     <div class="dropdown"><span> |More info|</span><div class="dropdown-content">
     <p>Gives player +1000 of all resources</p><p>this is for testing only</p></div></div> -->
+    <p id="energy_display">Energy: 0</p>
     <br>
     <br>
     <button onclick="click_button()">Manual labor +1</button>
@@ -126,6 +141,10 @@
     <p id="iron_factory_count" style="display: inline-block;">0 owned | 0 iron</p>
     <div class="dropdown"><span> |More info|</span><div class="dropdown-content"><p>Mines +1/s Iron</p></div></div>
     <br>
+    <button onclick="buy_copper_factory()">Buy copper Mine (50 Money)</button>
+    <p id="copper_factory_count" style="display: inline-block;">0 owned | 0 copper</p>
+    <div class="dropdown"><span> |More info|</span><div class="dropdown-content"><p>Mines +1/s Copper</p></div></div>
+    <br>
     <button onclick="buy_small_factory()">Buy Small Factory (50 Money - 10 Iron)</button>
     <p id="small_factory_count" style="display: inline-block;">0 owned</p>
     <div class="dropdown"><span> |More info|</span><div class="dropdown-content"><p>Makes +1/s Money</p></div></div>
@@ -137,29 +156,62 @@
     <button onclick="buy_large_factory()">Buy Large Factory (100 Money + 50 steel)</button>
     <p id="large_factory_count" style="display: inline-block;">0 owned</p>
     <div class="dropdown"><span> |More info|</span><div class="dropdown-content"><p>Makes +10/s Money</p></div></div>
+    <br>
+    <button onclick="buy_energy_factory()">Buy LV Power-Plant (1000 Money + 50 steel + 100 copper)</button>
+    <p id="energy_factory_count" style="display: inline-block;">0 owned</p>
+    <div class="dropdown"><span> |More info|</span><div class="dropdown-content"><p>Makes +10/s Energy</p></div></div>
 
 <!--------------------------------------------------------------------------------------------------------------------------------------->
 
 <style>
-    .dropdown {
-      position: relative;
-      display: inline-block;
-      background-color: #f9f9f9;
-    }
-    
-    .dropdown-content {
-      display: none;
-      position: absolute;
-      background-color: #f9f9f9;
-      min-width: 160px;
-      box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-      padding: 12px 16px;
-      z-index: 1;
-    }
-    
-    .dropdown:hover .dropdown-content {
-      display: block;
-    }
+body {
+            background-color: #121212;
+            color: #ffffff;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+            text-align: left;
+        }
+
+        button {
+            background-color: #1f1f1f;
+            color: #ffffff;
+            border: 1px solid #333;
+            border-radius: 5px;
+            padding: 10px 20px;
+            margin: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        button:hover {
+            background-color: #333;
+            transform: scale(1.05);
+        }
+
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #1f1f1f;
+            border: 1px solid #333;
+            min-width: 160px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            z-index: 1;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        p {
+            margin: 5px;
+        }
     </style>
 
 </body>
