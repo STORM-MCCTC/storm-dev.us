@@ -13,6 +13,7 @@
     let money = 0;
     let coal = 0;
     let iron = 0;
+    let copper = 0;
     let steel = 0;
     let coal_mine = 0;
     let iron_mine = 0;
@@ -92,6 +93,8 @@
             coal += coal_mine; // Each coal mine produces 1 coal per second
             iron += iron_mine; // Each iron mine produces 1 iron per second
             steel += steel_mill; // Each steel mill produces 1 steel per second
+            iron -= steel_mill; // Each steel mill uses 1 iron per second
+            coal -= steel_mill; // Each steel mill uses 1 coal per second
             document.getElementById("money_count").innerHTML = `Money: ${money}`;
             document.getElementById("coal_factory_count").innerHTML = `${coal_mine} Owned | ${coal} Coal`;
             document.getElementById("iron_factory_count").innerHTML = `${iron_mine} Owned | ${iron} Iron`;
