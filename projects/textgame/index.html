@@ -15,98 +15,112 @@
     let iron = 0;
     let copper = 0;
     let steel = 0;
+
     let coal_mine = 0;
     let iron_mine = 0;
     let copper_mine = 0;
     let small_factory = 0;
     let steel_mill = 0;
-    let large_factory = 0;  
-    
+    let large_factory = 0;
+
+    let coal_mine_price = 16;
+    let iron_mine_price = 32;
+    let copper_mine_price = 64;
+    let small_factory_price = 64;
+    let steel_mill_price = 128;
+    let large_factory_price = 128;
+
     function onloadalert() {
         window.alert("Main Script Loaded");
+        updateButtonTexts(); // Update button prices on load
     }
 
-    function dev_button(){
-        money += 1000;
-        coal += 1000;
-        iron += 1000;
-        steel += 1000;
-    }
-    
     function click_button() {
         money += 1;
         document.getElementById("money_count").innerHTML = `Money: ${money}`;
     }
-    
-    function buy_coal_factory() { 
-        if (money >= 15) {
-            money -= 15;
+
+    function buy_coal_factory() {
+        if (money >= coal_mine_price) {
+            money -= coal_mine_price;
             coal_mine += 1;
+            coal_mine_price *= 2;  // Double the price after purchase
             document.getElementById("money_count").innerHTML = `Money: ${money}`;
             document.getElementById("coal_factory_count").innerHTML = `${coal_mine} Owned | ${coal} Coal`;
-        }
-    }
-    
-    function buy_iron_factory() { 
-        if (money >= 25) {
-            money -= 25;
-            iron_mine += 1;
-            document.getElementById("money_count").innerHTML = `Money: ${money}`;
-            document.getElementById("iron_factory_count").innerHTML = `${iron_mine} Owned | ${iron} Iron`;
+            updateButtonTexts();
         }
     }
 
-    function buy_copper_factory() { 
-        if (money >= 50) {
-            money -= 50;
+    function buy_iron_factory() {
+        if (money >= iron_mine_price) {
+            money -= iron_mine_price;
+            iron_mine += 1;
+            iron_mine_price *= 2;  // Double the price after purchase
+            document.getElementById("money_count").innerHTML = `Money: ${money}`;
+            document.getElementById("iron_factory_count").innerHTML = `${iron_mine} Owned | ${iron} Iron`;
+            updateButtonTexts();
+        }
+    }
+
+    function buy_copper_factory() {
+        if (money >= copper_mine_price) {
+            money -= copper_mine_price;
             copper_mine += 1;
+            copper_mine_price *= 2;  // Double the price after purchase
             document.getElementById("money_count").innerHTML = `Money: ${money}`;
             document.getElementById("copper_factory_count").innerHTML = `${copper_mine} Owned | ${copper} Copper`;
+            updateButtonTexts();
         }
     }
-    
-    function buy_small_factory() { 
-        if (money >= 50 && iron >= 10) {
-            money -= 50;
-            iron -= 10; // Deduct iron for purchasing small factory
-            small_factory += 1; 
+
+    function buy_small_factory() {
+        if (money >= small_factory_price && iron >= 10) {
+            money -= small_factory_price;
+            iron -= 10;
+            small_factory += 1;
+            small_factory_price *= 2;  // Double the price after purchase
             document.getElementById("money_count").innerHTML = `Money: ${money}`;
             document.getElementById("small_factory_count").innerHTML = `${small_factory} Owned`;
+            updateButtonTexts();
         }
     }
-    
-    function buy_steel_factory() { 
-        if (money >= 100 && iron >= 20 && coal >= 1) {
-            money -= 100;
+
+    function buy_steel_factory() {
+        if (money >= steel_mill_price && iron >= 20 && coal >= 1) {
+            money -= steel_mill_price;
             iron -= 20;
-            coal -= 1; // Deduct resources for purchasing steel mill
-            steel_mill += 1; 
+            coal -= 1;
+            steel_mill += 1;
+            steel_mill_price *= 2;  // Double the price after purchase
             document.getElementById("money_count").innerHTML = `Money: ${money}`;
             document.getElementById("Large_steel_count").innerHTML = `${steel_mill} Owned | ${steel} Steel`;
+            updateButtonTexts();
         }
     }
-    
-    function buy_large_factory() { 
-        if (money >= 100 && steel >= 50) {
-            money -= 100;
-            steel -= 50; // Deduct steel for purchasing large factory
-            large_factory += 1; 
+
+    function buy_large_factory() {
+        if (money >= large_factory_price && steel >= 50) {
+            money -= large_factory_price;
+            steel -= 50;
+            large_factory += 1;
+            large_factory_price *= 2;  // Double the price after purchase
             document.getElementById("money_count").innerHTML = `Money: ${money}`;
             document.getElementById("large_factory_count").innerHTML = `${large_factory} Owned`;
+            updateButtonTexts();
         }
     }
-    
+
     function startAutoCollection() {
         setInterval(() => {
-            money += small_factory;
-            money += large_factory * 10; 
-            coal += coal_mine; // Each coal mine produces 1 coal per second
-            iron += iron_mine; // Each iron mine produces 1 iron per second
-            copper += copper_mine; // Each copper mine produces 1 copper per second
+            money += small_factory * 1;  // Each small factory generates 1 money per second
+            money += large_factory * 10;  // Each large factory generates 10 money per second
+            coal += coal_mine;  // Each coal mine produces 1 coal per second
+            iron += iron_mine;  // Each iron mine produces 1 iron per second
+            copper += copper_mine;  // Each copper mine produces 1 copper per second
             if (iron > 0 && coal > 0) {
                 steel += steel_mill;  // Each steel mill produces 1 steel per second
-                iron -= steel_mill;    // Each steel mill uses 1 iron per second
-                coal -= steel_mill;    // Each steel mill uses 1 coal per second
+                iron -= steel_mill;  // Each steel mill uses 1 iron per second
+                coal -= steel_mill;  // Each steel mill uses 1 coal per second
             }
             document.getElementById("money_count").innerHTML = `Money: ${money}`;
             document.getElementById("coal_factory_count").innerHTML = `${coal_mine} Owned | ${coal} Coal`;
@@ -115,9 +129,18 @@
             document.getElementById("Large_steel_count").innerHTML = `${steel_mill} Owned | ${steel} Steel`;
         }, 1000);
     }
-    
+
+    function updateButtonTexts() {
+        document.querySelector('button[onclick="buy_coal_factory()"]').innerHTML = `Buy Coal Mine (${coal_mine_price} Money)`;
+        document.querySelector('button[onclick="buy_iron_factory()"]').innerHTML = `Buy Iron Mine (${iron_mine_price} Money)`;
+        document.querySelector('button[onclick="buy_copper_factory()"]').innerHTML = `Buy Copper Mine (${copper_mine_price} Money)`;
+        document.querySelector('button[onclick="buy_small_factory()"]').innerHTML = `Buy Small Factory (${small_factory_price} Money - 10 Iron)`;
+        document.querySelector('button[onclick="buy_steel_factory()"]').innerHTML = `Buy Steel Mill (${steel_mill_price} Money - 20 Iron - 1 Coal)`;
+        document.querySelector('button[onclick="buy_large_factory()"]').innerHTML = `Buy Large Factory (${large_factory_price} Money - 50 Steel)`;
+    }
+
     startAutoCollection();
-    </script>
+</script>
     
 <!--------------------------------------------------------------------------------------------------------------------------------------->
 
