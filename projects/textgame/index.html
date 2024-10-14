@@ -9,40 +9,155 @@
 
 <!--------------------------------------------------------------------------------------------------------------------------------------->
 
-    <script>
-let money = 0;
-let auto_clickers = 0;
+<script>
+    let money = 0;
+    let coal = 0;
+    let iron = 0;
+    let steel = 0;
+    let coal_mine = 0;
+    let iron_mine = 0;
+    let small_factory = 0;
+    let steel_mill = 0;
+    let large_factory = 0;  
+    
+    function onloadalert() {
+        window.alert("Main Script Loaded");
+    }
 
-function onloadalert() {
-    window.alert("main.js loaded");
-}
-
-function click_button() {
-    money += 1;
-    document.getElementById("money_count").innerHTML = `Money: ${money}`;
-}
-
-function buy_auto() {
-    if (money >= 50) {
-        money -= 50;
-        auto_clickers += 1;
-        document.getElementById("money_count").innerHTML = `money: ${money}`;
-        document.getElementById("auto_clicker_count").innerHTML = `${auto_clickers} owned`;
+    function dev_button(){
+        money += 1000;
+        coal += 1000;
+        iron += 1000;
+        steel += 1000;
+    }
+    
+    function click_button() {
+        money += 1;
+        document.getElementById("money_count").innerHTML = `Money: ${money}`;
+    }
+    
+    function buy_coal_factory() { 
+        if (money >= 15) {
+            money -= 15;
+            coal_mine += 1;
+            document.getElementById("money_count").innerHTML = `Money: ${money}`;
+            document.getElementById("coal_factory_count").innerHTML = `${coal_mine} Owned | ${coal} Coal`;
         }
     }
+    
+    function buy_iron_factory() { 
+        if (money >= 25) {
+            money -= 25;
+            iron_mine += 1;
+            document.getElementById("money_count").innerHTML = `Money: ${money}`;
+            document.getElementById("iron_factory_count").innerHTML = `${iron_mine} Owned | ${iron} Iron`;
+        }
+    }
+    
+    function buy_small_factory() { 
+        if (money >= 50 && iron >= 10) {
+            money -= 50;
+            iron -= 10; // Deduct iron for purchasing small factory
+            small_factory += 1; 
+            document.getElementById("money_count").innerHTML = `Money: ${money}`;
+            document.getElementById("small_factory_count").innerHTML = `${small_factory} Owned`;
+        }
+    }
+    
+    function buy_steel_factory() { 
+        if (money >= 100 && iron >= 20 && coal >= 1) {
+            money -= 100;
+            iron -= 20;
+            coal -= 1; // Deduct resources for purchasing steel mill
+            steel_mill += 1; 
+            document.getElementById("money_count").innerHTML = `Money: ${money}`;
+            document.getElementById("Large_steel_count").innerHTML = `${steel_mill} Owned | ${steel} Steel`;
+        }
+    }
+    
+    function buy_large_factory() { 
+        if (money >= 100 && steel >= 50) {
+            money -= 100;
+            steel -= 50; // Deduct steel for purchasing large factory
+            large_factory += 1; 
+            document.getElementById("money_count").innerHTML = `Money: ${money}`;
+            document.getElementById("large_factory_count").innerHTML = `${large_factory} Owned`;
+        }
+    }
+    
+    function startAutoCollection() {
+        setInterval(() => {
+            money += small_factory;
+            money += large_factory * 10; 
+            coal += coal_mine; // Each coal mine produces 1 coal per second
+            iron += iron_mine; // Each iron mine produces 1 iron per second
+            steel += steel_mill; // Each steel mill produces 1 steel per second
+            document.getElementById("money_count").innerHTML = `Money: ${money}`;
+            document.getElementById("coal_factory_count").innerHTML = `${coal_mine} Owned | ${coal} Coal`;
+            document.getElementById("iron_factory_count").innerHTML = `${iron_mine} Owned | ${iron} Iron`;
+            document.getElementById("Large_steel_count").innerHTML = `${steel_mill} Owned | ${steel} Steel`;
+        }, 1000);
+    }
+    
+    startAutoCollection();
     </script>
-
+    
 <!--------------------------------------------------------------------------------------------------------------------------------------->
 
 </head>
 <body onload="onloadalert()">
-    <p id="money_count" >Money: 0</p>
-    <button onclick="click_button()" >Click</button>
+    <!-- <button onclick="dev_button()">Development Button</button>
+    <div class="dropdown"><span> |More info|</span><div class="dropdown-content">
+    <p>Gives player +1000 of all resources</p><p>this is for testing only</p></div></div> -->
     <br>
     <br>
-    <button onclick="buy_auto()" >Auto Clicker - $50</button>
-    <p id="auto_clicker_count" >0 owned</p>
-</body>
-</html>
+    <button onclick="click_button()">Manual labor +1</button>
+    <p id="money_count" style="display: inline-block;">Money: 0</p>
+    <div class="dropdown"><span> |More info|</span><div class="dropdown-content"><p>Gives player +1 money on click.</p></div></div>
+    <br>
+    <button onclick="buy_coal_factory()">Buy Coal Mine (15 Money)</button>
+    <p id="coal_factory_count" style="display: inline-block;">0 owned | 0 coal</p>
+    <div class="dropdown"><span> |More info|</span><div class="dropdown-content"><p>Mines +1/s Coal</p></div></div>
+    <br>
+    <button onclick="buy_iron_factory()">Buy Iron Mine (25 Money)</button>
+    <p id="iron_factory_count" style="display: inline-block;">0 owned | 0 iron</p>
+    <div class="dropdown"><span> |More info|</span><div class="dropdown-content"><p>Mines +1/s Iron</p></div></div>
+    <br>
+    <button onclick="buy_small_factory()">Buy Small Factory (50 Money - 10 Iron)</button>
+    <p id="small_factory_count" style="display: inline-block;">0 owned</p>
+    <div class="dropdown"><span> |More info|</span><div class="dropdown-content"><p>Makes +1/s Money</p></div></div>
+    <br>
+    <button onclick="buy_steel_factory()">Buy Steel Mill (100 Money + 20 Iron)</button> 
+    <p id="Large_steel_count" style="display: inline-block;">0 owned | 0 Steel</p>
+    <div class="dropdown"><span> |More info|</span><div class="dropdown-content"><p>Makes +1/s Steel</p><p> Uses -1/s coal and -1/s Iron</p></div></div>
+    <br>
+    <button onclick="buy_large_factory()">Buy Large Factory (100 Money + 50 steel)</button>
+    <p id="large_factory_count" style="display: inline-block;">0 owned</p>
+    <div class="dropdown"><span> |More info|</span><div class="dropdown-content"><p>Makes +10/s Money</p></div></div>
 
 <!--------------------------------------------------------------------------------------------------------------------------------------->
+
+<style>
+    .dropdown {
+      position: relative;
+      display: inline-block;
+      background-color: #f9f9f9;
+    }
+    
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: #f9f9f9;
+      min-width: 160px;
+      box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+      padding: 12px 16px;
+      z-index: 1;
+    }
+    
+    .dropdown:hover .dropdown-content {
+      display: block;
+    }
+    </style>
+
+</body>
+</html>
