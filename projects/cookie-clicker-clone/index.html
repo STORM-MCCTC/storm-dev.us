@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>storm-dev.us/projects/Cookie-Clicker-Clone</title>
+    <script>
+        let clicks = 0;
+
+        function clicked() {
+            clicks += 1;
+            document.getElementById("count").innerHTML = `Clicks: ${clicks}`;
+        }
+
+        function buttonDown() {
+            document.getElementById("button").src = "src/button_down.png";
+        }
+
+        function buttonUp() {
+            document.getElementById("button").src = "src/button.png";
+        }
+    </script>
+</head>
+<body>
+    <a onclick="window.open('https://www.storm-dev.us');">Home</a>
+    <p id="count">Clicks: 0</p>
+    <img 
+        src="src/button.png" 
+        id="button" 
+        onclick="clicked()" 
+        onmousedown="buttonDown()" 
+        onmouseup="buttonUp()" 
+        onmouseleave="buttonUp()" 
+        style="cursor: pointer;"
+        width="25%"
+        height="auto"
+    >
+
+    <style>
+        body {
+                    background-color: #121212;
+                    color: #ffffff;
+                    font-family: 'Arial', sans-serif;
+                    margin: 0;
+                    padding: 20px;
+                    text-align: left;
+                }
+        
+                button {
+                    background-color: #1f1f1f;
+                    color: #ffffff;
+                    border: 1px solid #333;
+                    border-radius: 5px;
+                    padding: 10px 20px;
+                    margin: 10px;
+                    cursor: pointer;
+                    transition: background-color 0.3s, transform 0.2s;
+                }
+        
+                button:hover {
+                    background-color: #333;
+                    transform: scale(1.05);
+                }
+        
+                .dropdown {
+                    position: relative;
+                    display: inline-block;
+                }
+        
+                .dropdown-content {
+                    display: none;
+                    position: absolute;
+                    background-color: #1f1f1f;
+                    border: 1px solid #333;
+                    min-width: 160px;
+                    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+                    padding: 10px;
+                    z-index: 1;
+                }
+        
+                .dropdown:hover .dropdown-content {
+                    display: block;
+                }
+        
+                p {
+                    margin: 5px;
+                }
+            </style>
+</body>
+</html>
