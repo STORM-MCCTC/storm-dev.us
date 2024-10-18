@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Industrial Production</title>
+    
+    <!--!------------------------------ HTML content -------------------------------->
+</head>
+<body>
+    <div class="container">
+        <div class="left">
+
+            <button onclick="click_coal()">Mine Coal</button> <button onclick="click_coal_t1()">T1 Coal Mine</button> <button onclick="click_coal_t2()">T2 Coal Mine</button> <button onclick="click_coal_t3()">T3 Coal Mine</button>
+            <div style="display: inline-block;" class="dropdown"><span> |More info|</span><div class="dropdown-content"><p>T1 +1/s</p><p>T2 +10/s</p><p>T3 +50/s</p></div></div>
+            <br>
+            <button onclick="click_iron()">Mine Iron</button> <button onclick="click_iron_t1()">T1 Iron Mine</button> <button onclick="click_iron_t2()">T2 Iron Mine</button> <button onclick="click_iron_t3()">T3 Iron Mine</button>
+            <div style="display: inline-block;" class="dropdown"><span> |More info|</span><div class="dropdown-content"><p>T1 +1/s</p><p>T2 +10/s</p><p>T3 +50/s</p></div></div>
+
+        </div>
+        <div class="right">
+            <h4>Coal</h4>
+            <p id="coal_ore_count">| T1 Gen - 0 | T2 Gen - 0 | T3 Gen - 0 | 0/800 Coal Ore |</p>
+            <br>
+            <h4>Iron</h4>
+            <p id="iron_ore_count">| T1 Gen - 0 | T2 Gen - 0 | T3 Gen - 0 | 0/800 Iron Ore |</p>
+        </div>
+    </div>
+    
+    <!--!------------------------------ JavaScript Script -------------------------------->
+<script>
+let coal = 0;
+let iron = 0;
+
+const MAX_COAL = 800; // Set maximum coal limit
+const MAX_IRON = 800; // Set maximum iron limit
+
+let coal_t1 = 0;
+let coal_t2 = 0;
+let coal_t3 = 0; 
+
+let iron_t1 = 0;
+let iron_t2 = 0;
+let iron_t3 = 0; 
+
+function click_coal() {
+    if (coal < MAX_COAL) {
+        coal += 1;
+        if (coal > MAX_COAL) coal = MAX_COAL; 
+        document.getElementById("coal_ore_count").innerHTML = `| T1 Gen - ${coal_t1} | T2 Gen - ${coal_t2} | T3 Gen - ${coal_t3} | ${coal}/${MAX_COAL} Coal Ore |`;
+    } else {
+        alert("Coal cap reached!");
+    }
+}
+
+function click_coal_t1() {
+    if (coal >= 10) {
+        coal -= 10;
+        coal_t1 += 1;
+        document.getElementById("coal_ore_count").innerHTML = `| T1 Gen - ${coal_t1} | T2 Gen - ${coal_t2} | T3 Gen - ${coal_t3} | ${coal}/${MAX_COAL} Coal Ore |`;
+    } else {
+        alert("Insufficient coal!");
+    }
+}
+
+function click_coal_t2() {
+    if (coal >= 100) {
+        coal -= 100;
+        coal_t2 += 1;
+        document.getElementById("coal_ore_count").innerHTML = `| T1 Gen - ${coal_t1} | T2 Gen - ${coal_t2} | T3 Gen - ${coal_t3} | ${coal}/${MAX_COAL} Coal Ore |`;
+    } else {
+        alert("Insufficient coal!");
+    }
+}
+
+function click_coal_t3() {
+    if (coal >= 1000) {
+        coal -= 1000;
+        coal_t3 += 1;
+        document.getElementById("coal_ore_count").innerHTML = `| T1 Gen - ${coal_t1} | T2 Gen - ${coal_t2} | T3 Gen - ${coal_t3} | ${coal}/${MAX_COAL} Coal Ore |`;
+    } else {
+        alert("Insufficient coal!");
+    }
+}
+
+function click_iron() {
+    if (iron < MAX_IRON) {
+        iron += 1;
+        if (iron > MAX_IRON) iron = MAX_IRON; 
+        document.getElementById("iron_ore_count").innerHTML = `| T1 Gen - ${iron_t1} | T2 Gen - ${iron_t2} | T3 Gen - ${iron_t3} | ${iron}/${MAX_IRON} Iron Ore |`;
+    } else {
+        alert("Iron cap reached!");
+    }
+}
+
+function click_iron_t1() {
+    if (iron >= 10) {
+        iron -= 10;
+        iron_t1 += 1;
+        document.getElementById("iron_ore_count").innerHTML = `| T1 Gen - ${iron_t1} | T2 Gen - ${iron_t2} | T3 Gen - ${iron_t3} | ${iron}/${MAX_IRON} Iron Ore |`;
+    } else {
+        alert("Insufficient iron!");
+    }
+}
+
+function click_iron_t2() {
+    if (iron >= 100) {
+        iron -= 100;
+        iron_t2 += 1;
+        document.getElementById("iron_ore_count").innerHTML = `| T1 Gen - ${iron_t1} | T2 Gen - ${iron_t2} | T3 Gen - ${iron_t3} | ${iron}/${MAX_IRON} Iron Ore |`;
+    } else {
+        alert("Insufficient iron!");
+    }
+}
+
+function click_iron_t3() {
+    if (iron >= 1000) {
+        iron -= 1000;
+        iron_t3 += 1;
+        document.getElementById("iron_ore_count").innerHTML = `| T1 Gen - ${iron_t1} | T2 Gen - ${iron_t2} | T3 Gen - ${iron_t3} | ${iron}/${MAX_IRON} Iron Ore |`;
+    } else {
+        alert("Insufficient iron!");
+    }
+}
+
+function startAutoCollection() {
+    setInterval(() => {
+        coal += coal_t1; // T1 generators produce 1/s
+        coal += coal_t2 * 10; // T2 generators produce 10/s
+        coal += coal_t3 * 50; // T3 generators produce 50/s
+        iron += iron_t1; // T1 generators produce 1/s
+        iron += iron_t2 * 10; // T2 generators produce 10/s
+        iron += iron_t3 * 50; // T3 generators produce 50/s
+
+        if (coal > MAX_COAL) coal = MAX_COAL;
+        if (iron > MAX_IRON) iron = MAX_IRON;
+
+        document.getElementById("coal_ore_count").innerHTML = `| T1 Gen - ${coal_t1} | T2 Gen - ${coal_t2} | T3 Gen - ${coal_t3} | ${coal}/${MAX_COAL} Coal Ore |`;
+        document.getElementById("iron_ore_count").innerHTML = `| T1 Gen - ${iron_t1} | T2 Gen - ${iron_t2} | T3 Gen - ${iron_t3} | ${iron}/${MAX_IRON} Iron Ore |`;
+    }, 1000);
+}
+startAutoCollection();
+    </script>
+    <!--!------------------------------ CSS Styles -------------------------------->
+    <style>
+        body {
+            background-color: #121212;
+            color: #ffffff;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+            text-align: left;
+        }
+
+        .container {
+        display: flex;
+        align-items: flex-start; /* Align items to the top */
+        justify-content: space-between; /* Space between left content and the box */
+}
+
+        .left {
+            margin-right: 20px; /* Add space between the left content and the box */
+        }
+
+        .right {
+            text-align: center;
+            background-color: #1f1f1f; /* Match the button background color */
+            border: 1px solid #333;
+            border-radius: 5px;
+            padding: 10px;
+            min-width: 200px; /* Minimum width of the box */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Optional shadow for depth */
+        }
+
+        button {
+            background-color: #1f1f1f;
+            color: #ffffff;
+            border: 1px solid #333;
+            border-radius: 5px;
+            padding: 10px 20px;
+            margin: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        button:hover {
+            background-color: #333;
+            transform: scale(1.05);
+        }
+
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #1f1f1f;
+            border: 1px solid #333;
+            min-width: 160px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            z-index: 1;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        p {
+            margin: 5px;
+        }
+    </style>
+</body>
+</html>
