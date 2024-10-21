@@ -1,216 +1,199 @@
+<!--!------------------------------------------HTML Content------------------------------------------>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Industrial Production</title>
-    
-    <!--!------------------------------ HTML content -------------------------------->
 </head>
 <body>
     <div class="container">
         <div class="left">
-
-            <button onclick="click_coal()">Mine Coal</button> <button onclick="click_coal_t1()">T1 Coal Mine</button> <button onclick="click_coal_t2()">T2 Coal Mine</button> <button onclick="click_coal_t3()">T3 Coal Mine</button>
-            <div style="display: inline-block;" class="dropdown"><span> |More info|</span><div class="dropdown-content"><p>T1 +1/s</p><p>T2 +10/s</p><p>T3 +50/s</p></div></div>
-            <br>
-            <button onclick="click_iron()">Mine Iron</button> <button onclick="click_iron_t1()">T1 Iron Mine</button> <button onclick="click_iron_t2()">T2 Iron Mine</button> <button onclick="click_iron_t3()">T3 Iron Mine</button>
-            <div style="display: inline-block;" class="dropdown"><span> |More info|</span><div class="dropdown-content"><p>T1 +1/s</p><p>T2 +10/s</p><p>T3 +50/s</p></div></div>
-
+            <h1>Industrial Production Game</h1>
+            <h2>Mining Industry: </h2>
+            <div id="coal-controls" class="resource-controls"></div>
+            <div id="iron-controls" class="resource-controls"></div>
+            <div id="copper-controls" class="resource-controls"></div>
+            <h2>Forestry Industry: </h2>
+            <div id="wood-controls" class="resource-controls"></div>
+            <div id="Sawmill-controls" class="resource-controls"></div>
         </div>
         <div class="right">
             <h4>Coal</h4>
-            <p id="coal_ore_count">| T1 Gen - 0 | T2 Gen - 0 | T3 Gen - 0 | 0/800 Coal Ore |</p>
-            <br>
+            <p id="coal_ore_count">| T1 Gen - 0 | T2 Gen - 0 | T3 Gen - 0 | 0/200 Coal Ore |</p>
+            <button onclick="upgradeStorage('coal')">Upgrade storage</button>
+
             <h4>Iron</h4>
-            <p id="iron_ore_count">| T1 Gen - 0 | T2 Gen - 0 | T3 Gen - 0 | 0/800 Iron Ore |</p>
+            <p id="iron_ore_count">| T1 Gen - 0 | T2 Gen - 0 | T3 Gen - 0 | 0/200 Iron Ore |</p>
+            <button onclick="upgradeStorage('iron')">Upgrade storage</button>
+
+            <h4>Copper</h4>
+            <p id="copper_ore_count">| T1 Gen - 0 | T2 Gen - 0 | T3 Gen - 0 | 0/200 Copper Ore |</p>
+            <button onclick="upgradeStorage('copper')">Upgrade storage</button>
+
+            <h4>wood</h4>
+            <p id="wood_ore_count">| T1 Gen - 0 | T2 Gen - 0 | T3 Gen - 0 | 0/200 Wood |</p>
+            <button onclick="upgradeStorage('wood')">Upgrade storage</button>
         </div>
     </div>
-    
-    <!--!------------------------------ JavaScript Script -------------------------------->
+
+<!--!------------------------------------------JAVA SCRIPT------------------------------------------>
+
 <script>
-let coal = 0;
-let iron = 0;
+const resources = {
+    coal: { amount: 0, max: 200, tiers: [0, 0, 0] },
+    iron: { amount: 0, max: 200, tiers: [0, 0, 0] },
+    copper: { amount: 0, max: 200, tiers: [0, 0, 0] },
+};
 
-const MAX_COAL = 800; // Set maximum coal limit
-const MAX_IRON = 800; // Set maximum iron limit
+const tierCosts = [10, 100, 1000]; // Iron cost for T1, T2, T3 mines
+const tierProduction = [1, 10, 50]; // Production per second for each tier
 
-let coal_t1 = 0;
-let coal_t2 = 0;
-let coal_t3 = 0; 
+// Generate controls dynamically based on resource type
+function generateControls(resource) {
+    const container = document.getElementById(`${resource}-controls`);
+    container.innerHTML = `
+        <button onclick="mineResource('${resource}')">Mine ${capitalize(resource)}</button>
+        ${tierCosts.map((_, i) => 
+            `<button onclick="buyGenerator('${resource}', ${i})">T${i + 1} ${capitalize(resource)} Mine</button>`).join('')}
+        <div class="dropdown">
+            <span>| Generator Details and Production Rates |</span>
+            <div class="dropdown-content">
+                ${tierCosts.map((cost, i) => `<p>T${i + 1} Generator: +${tierProduction[i]}/s Production - Costs ${cost} Iron</p>`).join('')}
+            </div>
+        </div>`;
+}
 
-let iron_t1 = 0;
-let iron_t2 = 0;
-let iron_t3 = 0; 
+// Capitalize the first letter of a word
+function capitalize(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+}
 
-function click_coal() {
-    if (coal < MAX_COAL) {
-        coal += 1;
-        if (coal > MAX_COAL) coal = MAX_COAL; 
-        document.getElementById("coal_ore_count").innerHTML = `| T1 Gen - ${coal_t1} | T2 Gen - ${coal_t2} | T3 Gen - ${coal_t3} | ${coal}/${MAX_COAL} Coal Ore |`;
+// Mine the resource manually
+function mineResource(resource) {
+    if (resources[resource].amount < resources[resource].max) {
+        resources[resource].amount++;
+        updateDisplay(resource);
     } else {
-        alert("Coal cap reached!");
+        alert(`${capitalize(resource)} cap reached!`);
     }
 }
 
-function click_coal_t1() {
-    if (coal >= 10) {
-        coal -= 10;
-        coal_t1 += 1;
-        document.getElementById("coal_ore_count").innerHTML = `| T1 Gen - ${coal_t1} | T2 Gen - ${coal_t2} | T3 Gen - ${coal_t3} | ${coal}/${MAX_COAL} Coal Ore |`;
-    } else {
-        alert("Insufficient coal!");
-    }
-}
-
-function click_coal_t2() {
-    if (coal >= 100) {
-        coal -= 100;
-        coal_t2 += 1;
-        document.getElementById("coal_ore_count").innerHTML = `| T1 Gen - ${coal_t1} | T2 Gen - ${coal_t2} | T3 Gen - ${coal_t3} | ${coal}/${MAX_COAL} Coal Ore |`;
-    } else {
-        alert("Insufficient coal!");
-    }
-}
-
-function click_coal_t3() {
-    if (coal >= 1000) {
-        coal -= 1000;
-        coal_t3 += 1;
-        document.getElementById("coal_ore_count").innerHTML = `| T1 Gen - ${coal_t1} | T2 Gen - ${coal_t2} | T3 Gen - ${coal_t3} | ${coal}/${MAX_COAL} Coal Ore |`;
-    } else {
-        alert("Insufficient coal!");
-    }
-}
-
-function click_iron() {
-    if (iron < MAX_IRON) {
-        iron += 1;
-        if (iron > MAX_IRON) iron = MAX_IRON; 
-        document.getElementById("iron_ore_count").innerHTML = `| T1 Gen - ${iron_t1} | T2 Gen - ${iron_t2} | T3 Gen - ${iron_t3} | ${iron}/${MAX_IRON} Iron Ore |`;
-    } else {
-        alert("Iron cap reached!");
-    }
-}
-
-function click_iron_t1() {
-    if (iron >= 10) {
-        iron -= 10;
-        iron_t1 += 1;
-        document.getElementById("iron_ore_count").innerHTML = `| T1 Gen - ${iron_t1} | T2 Gen - ${iron_t2} | T3 Gen - ${iron_t3} | ${iron}/${MAX_IRON} Iron Ore |`;
+// Buy a generator (T1, T2, or T3) for a resource
+function buyGenerator(resource, tier) {
+    const cost = tierCosts[tier];
+    if (resources.iron.amount >= cost) {
+        resources.iron.amount -= cost;
+        resources[resource].tiers[tier]++;
+        updateDisplay(resource);
     } else {
         alert("Insufficient iron!");
     }
 }
 
-function click_iron_t2() {
-    if (iron >= 100) {
-        iron -= 100;
-        iron_t2 += 1;
-        document.getElementById("iron_ore_count").innerHTML = `| T1 Gen - ${iron_t1} | T2 Gen - ${iron_t2} | T3 Gen - ${iron_t3} | ${iron}/${MAX_IRON} Iron Ore |`;
-    } else {
-        alert("Insufficient iron!");
+// Upgrade storage capacity for a resource
+function upgradeStorage(resource) {
+    const res = resources[resource];
+    if (res.amount === res.max) {
+        res.amount -= res.max;
+        res.max *= 2;
+        updateDisplay(resource);
     }
 }
 
-function click_iron_t3() {
-    if (iron >= 1000) {
-        iron -= 1000;
-        iron_t3 += 1;
-        document.getElementById("iron_ore_count").innerHTML = `| T1 Gen - ${iron_t1} | T2 Gen - ${iron_t2} | T3 Gen - ${iron_t3} | ${iron}/${MAX_IRON} Iron Ore |`;
-    } else {
-        alert("Insufficient iron!");
-    }
+// Update the display of resources on the page
+function updateDisplay(resource) {
+    const res = resources[resource];
+    const display = document.getElementById(`${resource}_ore_count`);
+    display.innerHTML = `| T1 Gen - ${res.tiers[0]} | T2 Gen - ${res.tiers[1]} | T3 Gen - ${res.tiers[2]} | ${res.amount}/${res.max} ${capitalize(resource)} Ore |`;
+
+    document.getElementById('iron_ore_count').innerHTML = 
+        `| T1 Gen - ${resources.iron.tiers[0]} | T2 Gen - ${resources.iron.tiers[1]} | T3 Gen - ${resources.iron.tiers[2]} | ${resources.iron.amount}/${resources.iron.max} Iron Ore |`;
 }
 
+// Automatically collect resources every second
 function startAutoCollection() {
     setInterval(() => {
-        coal += coal_t1; // T1 generators produce 1/s
-        coal += coal_t2 * 10; // T2 generators produce 10/s
-        coal += coal_t3 * 50; // T3 generators produce 50/s
-        iron += iron_t1; // T1 generators produce 1/s
-        iron += iron_t2 * 10; // T2 generators produce 10/s
-        iron += iron_t3 * 50; // T3 generators produce 50/s
-
-        if (coal > MAX_COAL) coal = MAX_COAL;
-        if (iron > MAX_IRON) iron = MAX_IRON;
-
-        document.getElementById("coal_ore_count").innerHTML = `| T1 Gen - ${coal_t1} | T2 Gen - ${coal_t2} | T3 Gen - ${coal_t3} | ${coal}/${MAX_COAL} Coal Ore |`;
-        document.getElementById("iron_ore_count").innerHTML = `| T1 Gen - ${iron_t1} | T2 Gen - ${iron_t2} | T3 Gen - ${iron_t3} | ${iron}/${MAX_IRON} Iron Ore |`;
+        for (const [resource, data] of Object.entries(resources)) {
+            data.tiers.forEach((count, tier) => {
+                data.amount += count * tierProduction[tier];
+                if (data.amount > data.max) data.amount = data.max;
+            });
+            updateDisplay(resource);
+        }
     }, 1000);
 }
-startAutoCollection();
-    </script>
-    <!--!------------------------------ CSS Styles -------------------------------->
-    <style>
-        body {
-            background-color: #121212;
-            color: #ffffff;
-            font-family: 'Arial', sans-serif;
-            margin: 0;
-            padding: 20px;
-            text-align: left;
-        }
 
-        .container {
-        display: flex;
-        align-items: flex-start; /* Align items to the top */
-        justify-content: space-between; /* Space between left content and the box */
+// Initialize the page
+function init() {
+    generateControls('coal');
+    generateControls('iron');
+    generateControls('copper');
+    generateControls('wood');
+    startAutoCollection();
 }
 
-        .left {
-            margin-right: 20px; /* Add space between the left content and the box */
-        }
+init();
+</script>
 
-        .right {
-            text-align: center;
-            background-color: #1f1f1f; /* Match the button background color */
-            border: 1px solid #333;
-            border-radius: 5px;
-            padding: 10px;
-            min-width: 200px; /* Minimum width of the box */
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Optional shadow for depth */
-        }
+<!--!------------------------------------------Styles CSS------------------------------------------>
 
-        button {
-            background-color: #1f1f1f;
-            color: #ffffff;
-            border: 1px solid #333;
-            border-radius: 5px;
-            padding: 10px 20px;
-            margin: 10px;
-            cursor: pointer;
-            transition: background-color 0.3s, transform 0.2s;
-        }
-
-        button:hover {
-            background-color: #333;
-            transform: scale(1.05);
-        }
-
-        .dropdown {
-            position: relative;
-            display: inline-block;
-        }
-
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            background-color: #1f1f1f;
-            border: 1px solid #333;
-            min-width: 160px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
-            padding: 10px;
-            z-index: 1;
-        }
-
-        .dropdown:hover .dropdown-content {
-            display: block;
-        }
-
-        p {
-            margin: 5px;
-        }
-    </style>
+<style>
+    body {
+        background-color: #121212;
+        color: #ffffff;
+        font-family: 'Arial', sans-serif;
+        margin: 0;
+        padding: 20px;
+    }
+    .container {
+        display: flex;
+        justify-content: space-between;
+    }
+    .left {
+        margin-right: 20px;
+    }
+    .right {
+        text-align: center;
+        background-color: #1f1f1f;
+        border: 1px solid #333;
+        border-radius: 5px;
+        padding: 10px;
+        min-width: 200px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    }
+    button {
+        background-color: #1f1f1f;
+        color: #ffffff;
+        border: 1px solid #333;
+        border-radius: 5px;
+        padding: 10px 20px;
+        margin: 10px;
+        cursor: pointer;
+        transition: background-color 0.3s, transform 0.2s;
+    }
+    button:hover {
+        background-color: #333;
+        transform: scale(1.05);
+    }
+    .dropdown {
+        position: relative;
+        display: inline-block;
+    }
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #1f1f1f;
+        border: 1px solid #333;
+        min-width: 160px;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+        padding: 10px;
+        z-index: 1;
+    }
+    .dropdown:hover .dropdown-content {
+        display: block;
+    }
+</style>
 </body>
 </html>
