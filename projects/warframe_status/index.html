@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Warframe Cycle Tracker</title>
+    <style>
+        body {
+            background-color: #121212;
+            color: #FFFFFF;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        .cycle {
+            margin: 20px auto;
+            padding: 15px;
+            border: 1px solid #333;
+            border-radius: 8px;
+            background-color: #1f1f1f;
+            max-width: 600px;
+        }
+        h1 {
+            margin-bottom: 30px;
+        }
+        .timestamp {
+            margin-top: 10px;
+            font-size: 0.9em;
+            color: #bbb;
+        }
+    </style>
+</head>
+<body>
+    <h1>Warframe Cycle Tracker</h1>
+    <div id="cetus" class="cycle">Loading Cetus data...</div>
+    <div id="vallis" class="cycle">Loading Vallis data...</div>
+    <div id="cambion" class="cycle">Loading Cambion Drift data...</div>
+    <div id="zariman" class="cycle">Loading Zariman data...</div>
+    <div id="voidTrader" class="cycle">Loading Void Trader data...</div>
+    <div id="archon" class="cycle">Loading Archon Hunt data...</div>
+    <div id="sortie" class="cycle">Loading Sortie data...</div>
+
+    <script>
+        // Utility function to fetch and return JSON data
+        async function fetchData(url) {
+            try {
+                const response = await fetch(url);
+                if (!response.ok) throw new Error('Network error');
+                return await response.json();
+            } catch (error) {
+                console.error(`Error fetching ${url}:`, error);
+                return null;
+            }
+        }
+
+        // Function to update all cycle data and display it
+        async function updateCycles() {
+            updateCetus();
+            updateVallis();
+            updateCambion();
+            updateZariman();
+            updateVoidTrader();
+            updateArchon();
+            updateSortie();
+        }
+
+        // Individual functions to fetch and display data for each cycle
+        async function updateCetus() {
+            const data = await fetchData('https://api.warframestat.us/pc/en/cetusCycle');
+            const element = document.getElementById('cetus');
+            if (data) {
+                const cycle = data.isDay ? 'Daylight' : 'Night';
+                element.innerHTML = `Cetus: Currently <strong>${cycle}</strong>. Time left: ${data.timeLeft}.`;
+            } else {
+                element.innerHTML = 'Error: Unable to retrieve Cetus data.';
+            }
+        }
+
+        async function updateVallis() {
+            const data = await fetchData('https://api.warframestat.us/pc/en/vallisCycle');
+            const element = document.getElementById('vallis');
+            if (data) {
+                const state = data.isWarm ? 'Warm' : 'Cold';
+                element.innerHTML = `Vallis: Currently <strong>${state}</strong>. Time left: ${data.timeLeft}.`;
+            } else {
+                element.innerHTML = 'Error: Unable to retrieve Vallis data.';
+            }
+        }
+
+        async function updateCambion() {
+            const data = await fetchData('https://api.warframestat.us/pc/en/cambionCycle');
+            const element = document.getElementById('cambion');
+            if (data) {
+                element.innerHTML = `Cambion Drift: Currently <strong>${data.state}</strong>. Time left: ${data.timeLeft}.`;
+            } else {
+                element.innerHTML = 'Error: Unable to retrieve Cambion Drift data.';
+            }
+        }
+
+        async function updateZariman() {
+            const data = await fetchData('https://api.warframestat.us/pc/en/zarimanCycle');
+            const element = document.getElementById('zariman');
+            if (data) {
+                const faction = data.isCorpus ? 'Corpus' : 'Grineer';
+                element.innerHTML = `Zariman: Under <strong>${faction}</strong> control. Time left: ${data.timeLeft}.`;
+            } else {
+                element.innerHTML = 'Error: Unable to retrieve Zariman data.';
+            }
+        }
+
+        async function updateVoidTrader() {
+            const data = await fetchData('https://api.warframestat.us/pc/en/voidTrader');
+            const element = document.getElementById('voidTrader');
+            if (data) {
+                element.innerHTML = `Void Trader: Baro Ki'Teer arrives in <strong>${data.startString}</strong> at <strong>${data.location}</strong>.`;
+            } else {
+                element.innerHTML = 'Error: Unable to retrieve Void Trader data.';
+            }
+        }
+
+        async function updateArchon() {
+            const data = await fetchData('https://api.warframestat.us/pc/en/archonHunt');
+            const element = document.getElementById('archon');
+            if (data) {
+                element.innerHTML = `Archon Hunt: Reset in <strong>${data.eta}</strong>.`;
+            } else {
+                element.innerHTML = 'Error: Unable to retrieve Archon Hunt data.';
+            }
+        }
+
+        async function updateSortie() {
+            const data = await fetchData('https://api.warframestat.us/pc/en/sortie');
+            const element = document.getElementById('sortie');
+            if (data) {
+                element.innerHTML = `Sortie: Reset in <strong>${data.eta}</strong>.`;
+            } else {
+                element.innerHTML = 'Error: Unable to retrieve Sortie data.';
+            }
+        }
+
+        // Call updateCycles initially and every 60 seconds
+        updateCycles();
+        setInterval(updateCycles, 1000); // Update every 60 seconds
+    </script>
+</body>
+</html>
